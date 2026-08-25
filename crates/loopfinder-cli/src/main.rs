@@ -58,6 +58,7 @@ fn main() -> Result<()> {
         sequence_length: cli.sample_fps,
     };
 
+    // let features = extract_frames()?;
     let detector = LoopDetecor::new(config);
     let candidates = detector.detect(&[]);
 
