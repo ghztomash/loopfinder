@@ -5,6 +5,8 @@ use color_eyre::eyre::Result;
 use tracing::{debug, info};
 use tracing_subscriber::{EnvFilter, filter::LevelFilter};
 
+use loopfinder_core::detector::{DetectorConfig, LoopDetecor};
+
 #[derive(Debug, Parser)]
 #[command(author, version, about)]
 struct Cli {
@@ -49,6 +51,15 @@ fn main() -> Result<()> {
 
     info!(input = %cli.input.display(), "starting loopfinder");
     debug!(verbosity = cli.verbose, "verbosity level set");
+
+    let config = DetectorConfig {
+        min_duration: cli.min_loop,
+        max_duration: cli.max_loop,
+        sequence_length: cli.sample_fps,
+    };
+
+    let detector = LoopDetecor::new(config);
+    let candidates = detector.detect(&[]);
 
     Ok(())
 }

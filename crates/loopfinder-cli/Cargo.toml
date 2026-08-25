@@ -1,9 +1,11 @@
 [package]
-name = "loopfidner-cli"
+name = "loopfinder-cli"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+loopfinder-core = { path = "../loopfinder-core" }
+
 color-eyre = "0.6"
 clap = { version = "4.6", features = ["derive"] }
 tracing = "0.1"

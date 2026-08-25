@@ -6,3 +6,4 @@ members = ["crates/*"]
 ffmpeg-next = "9.0"
 image = "0.25"
 rayon = "1.12"
+thiserror = "2.0"

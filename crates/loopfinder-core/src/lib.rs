@@ -1,6 +1,6 @@
-mod candidate;
-mod detector;
-mod frame;
+pub mod candidate;
+pub mod detector;
+pub mod frame;
 
 #[cfg(test)]
 mod tests {

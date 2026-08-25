@@ -6,6 +6,8 @@ pub struct DetectorConfig {
     pub sequence_length: usize,
 }
 
+pub enum DetectorError {}
+
 pub struct LoopDetecor {}
 
 impl LoopDetecor {
@@ -13,9 +15,9 @@ impl LoopDetecor {
         LoopDetecor {}
     }
 
-    pub fn detect(frames: &[FrameFeature]) -> Vec<LoopCandidate> {
+    pub fn detect(&self, frames: &[FrameFeature]) -> Result<Vec<LoopCandidate>, DetectorError> {
         let candidates = Vec::new();
 
-        candidates
+        Ok(candidates)
     }
 }
