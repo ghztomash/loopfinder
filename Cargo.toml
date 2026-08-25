@@ -1,9 +1,8 @@
-[package]
-name = "loopfinder"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+resolver = "3"
+members = ["crates/*"]
 
-[dependencies]
+[workspace.dependencies]
 ffmpeg-next = "9.0"
 image = "0.25"
 rayon = "1.12"
