@@ -1,4 +1,5 @@
 use std::path::Path;
+use thiserror::Error;
 
 use crate::{frame::VideoFrame, metadata::VideoMetadata};
 
@@ -11,26 +12,31 @@ pub struct VideoDecoder {
     time_base: ffmpeg_next::Rational,
 }
 
-pub enum DecoderError {}
+#[derive(Error, Debug)]
+pub enum DecoderError {
+    #[error("ffmpeg decoder error")]
+    Decode(#[from] ffmpeg_next::Error),
+    #[error("no ffmpeg streams")]
+    NoStreams,
+}
 
 impl VideoDecoder {
     pub fn open<P: AsRef<Path> + ?Sized>(path: &P) -> Result<Self, DecoderError> {
-        ffmpeg_next::init().unwrap();
+        ffmpeg_next::init()?;
 
-        let input = ffmpeg_next::format::input(path).unwrap();
+        let input = ffmpeg_next::format::input(path)?;
 
         let stream = input
             .streams()
             .best(ffmpeg_next::media::Type::Video)
-            .unwrap();
+            .ok_or(DecoderError::NoStreams)?;
 
         let stream_index = stream.index();
         let time_base = stream.time_base();
 
-        let context =
-            ffmpeg_next::codec::context::Context::from_parameters(stream.parameters()).unwrap();
+        let context = ffmpeg_next::codec::context::Context::from_parameters(stream.parameters())?;
 
-        let decoder = context.decoder().video().unwrap();
+        let decoder = context.decoder().video()?;
 
         let scaler = ffmpeg_next::software::scaling::Context::get(
             decoder.format(),
@@ -40,8 +46,7 @@ impl VideoDecoder {
             decoder.width(),
             decoder.height(),
             ffmpeg_next::software::scaling::Flags::BILINEAR,
-        )
-        .unwrap();
+        )?;
 
         let mut frame_index = 0;
 

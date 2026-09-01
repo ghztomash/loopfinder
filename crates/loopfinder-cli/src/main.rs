@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use clap::Parser;
 use color_eyre::eyre::Result;
+use loopfinder_video::decoder::VideoDecoder;
 use tracing::{debug, info};
 use tracing_subscriber::{EnvFilter, filter::LevelFilter};
 
@@ -57,6 +58,8 @@ fn main() -> Result<()> {
         max_duration: cli.max_loop,
         sequence_length: cli.sample_fps,
     };
+
+    let video = VideoDecoder::open(&cli.input)?;
 
     // let features = extract_frames()?;
     let detector = LoopDetecor::new(config);
