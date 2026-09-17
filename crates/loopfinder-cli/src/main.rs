@@ -60,6 +60,7 @@ fn main() -> Result<()> {
     };
 
     let video = VideoDecoder::open(&cli.input)?;
+    debug!("Loaded {:?}", video.metadata());
 
     // let features = extract_frames()?;
     let detector = LoopDetecor::new(config);
