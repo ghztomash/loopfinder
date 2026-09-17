@@ -13,13 +13,13 @@ use loopfinder_core::detector::{DetectorConfig, LoopDetecor};
 struct Cli {
     input: PathBuf,
 
-    #[arg(long)]
+    #[arg(long, default_value_t = 5)]
     sample_fps: usize,
 
-    #[arg(long)]
+    #[arg(long, default_value_t = 1.0)]
     min_loop: f64,
 
-    #[arg(long)]
+    #[arg(long, default_value_t = 10.0)]
     max_loop: f64,
 
     #[arg(short, long, action = clap::ArgAction::Count)]
