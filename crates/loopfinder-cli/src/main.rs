@@ -61,10 +61,14 @@ fn main() -> Result<()> {
 
     let video = VideoDecoder::open(&cli.input)?;
     debug!("Loaded {:?}", video.metadata());
+    // TODO: decode and extract frames in provided scale
+    // frames .. video.next_frames()
 
     // let features = extract_frames()?;
     let detector = LoopDetecor::new(config);
-    let candidates = detector.detect(&[]);
+    let candidates = detector.detect(&[]).unwrap();
+
+    debug!("candidates {:?}", candidates);
 
     Ok(())
 }

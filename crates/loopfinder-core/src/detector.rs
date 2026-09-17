@@ -1,13 +1,16 @@
 use crate::{candidate::LoopCandidate, frame::FrameFeature};
 
+#[derive(Debug)]
 pub struct DetectorConfig {
     pub min_duration: f64,
     pub max_duration: f64,
     pub sequence_length: usize,
 }
 
+#[derive(Debug)]
 pub enum DetectorError {}
 
+#[derive(Debug)]
 pub struct LoopDetecor {}
 
 impl LoopDetecor {

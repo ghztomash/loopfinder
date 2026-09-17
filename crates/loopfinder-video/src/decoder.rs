@@ -11,6 +11,7 @@ pub struct VideoDecoder {
     scaler: ffmpeg_next::software::scaling::Context,
     time_base: ffmpeg_next::Rational,
     metadata: VideoMetadata,
+    frame_index: usize,
 }
 
 #[derive(Error, Debug)]
@@ -64,8 +65,6 @@ impl VideoDecoder {
             ffmpeg_next::software::scaling::Flags::FAST_BILINEAR,
         )?;
 
-        let mut frame_index = 0;
-
         Ok(VideoDecoder {
             input,
             decoder,
@@ -73,6 +72,7 @@ impl VideoDecoder {
             time_base,
             scaling_index: 0,
             metadata,
+            frame_index: 0,
         })
     }
 
@@ -81,6 +81,7 @@ impl VideoDecoder {
     }
 
     pub fn next_frame(&mut self) -> Option<VideoFrame> {
+        self.frame_index = self.frame_index.saturating_add(1);
         None
     }
 }

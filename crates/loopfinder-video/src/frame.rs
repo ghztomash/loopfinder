@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct VideoFrame {
     pub timestamp: f64,
     pub width: u32,
