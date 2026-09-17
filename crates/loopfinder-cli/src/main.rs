@@ -7,6 +7,7 @@ use tracing::{debug, info};
 use tracing_subscriber::{EnvFilter, filter::LevelFilter};
 
 use loopfinder_core::detector::{DetectorConfig, LoopDetecor};
+use loopfinder_core::frame::FrameFeature;
 
 #[derive(Debug, Parser)]
 #[command(author, version, about)]
@@ -59,14 +60,21 @@ fn main() -> Result<()> {
         sequence_length: cli.sample_fps,
     };
 
-    let video = VideoDecoder::open(&cli.input)?;
+    let mut video = VideoDecoder::open(&cli.input)?;
     debug!("Loaded {:?}", video.metadata());
-    // TODO: decode and extract frames in provided scale
-    // frames .. video.next_frames()
 
-    // let features = extract_frames()?;
+    let mut features = Vec::new();
+    while let Some(frame) = video.next_frame() {
+        features.push(FrameFeature {
+            timestamp: frame.timestamp,
+            data: frame.data.iter().map(|&b| b as f32 / 255.0).collect(),
+        });
+    }
+
+    debug!("Extracted {} frame features", features.len());
+
     let detector = LoopDetecor::new(config);
-    let candidates = detector.detect(&[]).unwrap();
+    let candidates = detector.detect(&features).unwrap();
 
     debug!("candidates {:?}", candidates);
 
